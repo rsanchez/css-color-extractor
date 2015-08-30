@@ -87,22 +87,151 @@ extractor.fromDecl({ prop: 'color', value: '1px solid blue' });
 
 ## CLI
 
-Install globally:
+Install the CLI tool:
 
 ```
-npm install -g css-color-extractor
+npm install -g css-color-extractor-cli
 ```
 
-Then:
+Extract colors as a list to stdout:
 
 ```
 css-color-extractor input.css
+```
+
+Extract colors from stdin:
+
+```
+cat input.css | css-color-extractor
 ```
 
 Use the `--without-grey` or `--without-monochrome` flag(s):
 
 ```
 css-color-extractor input.css --without-grey
+```
+
+Extract colors to file:
+
+```
+css-color-extractor input.css output.txt
+```
+
+Extract colors to CSS format (includes original CSS selectors):
+
+```
+css-color-extractor input.css output.css
+
+# or to stdout
+css-color-extractor input.css --format=css
+```
+
+```css
+.foo {
+  color: red;
+  border: 1px solid #ab560f;
+  font-size: 16px;
+  background-image: linear-gradient(to-bottom, red, blue);
+}
+
+.bar {
+  color: rgba(0, 128, 255, 0.5);
+}
+
+.baz {
+  display: block;
+}
+```
+
+Yields:
+```css
+.foo {
+  color: red;
+  border-color: #ab560f;
+  background-image: linear-gradient(to-bottom, red, blue);
+}
+
+.bar {
+  color: rgba(0, 128, 255, 0.5);
+}
+```
+
+Extract colors to JSON format:
+
+```
+css-color-extractor input.css output.json
+
+# or to stdout
+css-color-extractor input.css --format=json
+```
+
+```css
+.foo {
+  color: red;
+  border: 1px solid #ab560f;
+  font-size: 16px;
+  background-image: linear-gradient(to-bottom, red, blue);
+}
+
+.bar {
+  color: rgba(0, 128, 255, 0.5);
+}
+
+.baz {
+  display: block;
+}
+```
+
+Yields:
+```js
+["red","#ab560f","blue","rgba(0, 128, 255, 0.5)"]
+```
+
+Extract colors to HTML format (page of color swatches):
+
+```
+css-color-extractor input.css output.html
+
+# or to stdout
+css-color-extractor input.css --format=html
+```
+
+```css
+.foo {
+  color: yellow;
+  border: 1px solid #ab560f;
+  font-size: 16px;
+  background-image: linear-gradient(to-bottom, red, blue);
+}
+
+.bar {
+  color: rgba(0, 128, 255, 0.5);
+}
+
+.baz {
+  display: block;
+}
+```
+
+Yields:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Colors</title>
+</head>
+<body>
+    <div class="container">
+        <ul class="swatches">
+            <li class="swatch swatch" style="background-color: yellow;">yellow</li>
+            <li class="swatch swatch-dark" style="background-color: #ab560f;">#ab560f</li>
+            <li class="swatch swatch-dark" style="background-color: rgba(0, 128, 255, 0.5);">rgba(0, 128, 255, 0.5)</li>
+            <li class="swatch swatch-dark" style="background-color: blue;">blue</li>
+        </ul>
+    </div>
+</body>
+</html>
 ```
 
 ## License

@@ -1,9 +1,8 @@
 {
   "name": "css-color-extractor",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Extract from colors from CSS.",
   "main": "index.js",
-  "bin": "./cli.js",
   "keywords": [
     "css",
     "color"
