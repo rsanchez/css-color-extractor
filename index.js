@@ -4,35 +4,9 @@ module.exports = new CssColorExtractor();
 
 function CssColorExtractor() {
     var postcss = require('postcss');
-    var cssColorList = require('css-color-list');
-    var hexRegex = require('hex-color-regex');
-    var rgbaRegex = require('rgba-regex');
-    var rgbRegex = require('rgb-regex');
-    var hslaRegex = require('hsla-regex');
-    var hslRegex = require('hsl-regex');
     var util = require('util');
     var unique = require('array-unique');
-
-    var greyRegex =
-    '^(' +
-    '#([a-fA-F0-9]{1,2})\\2\\2' + '|' +
-    '(dim|dark|light)?gr[ae]y' + '|' +
-    'rgb\\((\\d+),\\s*\\4,\\s*\\4\\)' + '|' +
-    'rgba\\((\\d+),\\s*\\5,\\s*\\5,\\s*\\d*(?:\\.\\d+)?\\)' + '|' +
-    'hsl\\(\\s*0\\s*,\\s*0(\\.[0]+)?%\\s*,\\s*\\d*(?:\\.\\d+)?%\\)' + '|' +
-    'hsla\\(0,\\s*0(\\.[0]+)?%,\\s*\\d*(?:\\.\\d+)?%,\\s*\\d*(?:\\.\\d+)?\\)' +
-    ')$';
-
-    var blackOrWhiteRegex =
-    '^(' +
-    '#([fF]{3}([fF]{3})?|000|000000)' + '|' +
-    'black' + '|' +
-    'white' + '|' +
-    'rgb\\((0|255),\\s*\\4,\\s*\\4\\)' + '|' +
-    'rgba\\((0|255),\\s*\\5,\\s*\\5,\\s*\\d*(?:\\.\\d+)?\\)' + '|' +
-    'hsl\\(\\s*0\\s*,\\s*0(\\.[0]+)?%\\s*,\\s*(0|100)(\\.[0]+)?%\\)' + '|' +
-    'hsla\\(0,\\s*0(\\.[0]+)?%,\\s*(0|100)(\\.[0]+)?%,\\s*\\d*(?:\\.\\d+)?\\)' +
-    ')$';
+    var Color = require('color');
 
     function doesPropertyAllowColor(property) {
         var properties = [
@@ -59,35 +33,20 @@ function CssColorExtractor() {
         return properties.indexOf(property) > -1;
     }
 
-    function isColor(value) {
-        var regex = new RegExp(
-            '^(' +
-            cssColorList().join('|') + '|' +
-            rgbRegex().source + '|' +
-            rgbaRegex().source + '|' +
-            hslRegex().source + '|' +
-            hslaRegex().source + '|' +
-            hexRegex().source +
-            ')$'
-        );
-
-        return regex.test(value);
-    }
-
-    function isColorBlackOrWhite(color) {
-        return new RegExp(blackOrWhiteRegex).test(color);
-    }
-
     function isColorGrey(color) {
-        if (isColorBlackOrWhite(color)) {
-            return false;
-        }
+        var red = color.red();
 
-        return new RegExp(greyRegex).test(color);
+        // we only need to test one color
+        // since isColorMonochrome assures that all
+        // three rgb colors are equal
+
+        return isColorMonochrome(color) && red > 0 && red < 255;
     }
 
     function isColorMonochrome(color) {
-        return isColorBlackOrWhite(color) || isColorGrey(color);
+        var hsl = color.hsl();
+
+        return hsl.h === 0 && hsl.s === 0;
     }
 
     function extractColors(string, options) {
@@ -120,15 +79,20 @@ function CssColorExtractor() {
         });
 
         values.forEach(function (value) {
-            if (!isColor(value)) {
+            var color;
+
+            // check if it is a valid color
+            try {
+                color = new Color(value);
+            } catch (e) {
                 return;
             }
 
-            if (options.withoutMonochrome && isColorMonochrome(value)) {
+            if (options.withoutMonochrome && isColorMonochrome(color)) {
                 return;
             }
 
-            if (options.withoutGrey && isColorGrey(value)) {
+            if (options.withoutGrey && isColorGrey(color)) {
                 return;
             }
 
