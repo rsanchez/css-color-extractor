@@ -339,7 +339,7 @@ describe('postcss-colors-only', function () {
 
     it('should omit rgb grey', function (done) {
         test(
-            'a { color: red; } p { color: rgba(1, 1, 1); }',
+            'a { color: red; } p { color: rgb(1, 1, 1); }',
             ['red'],
             { withoutGrey: true },
             done
