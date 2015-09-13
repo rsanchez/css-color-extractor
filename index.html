@@ -1,0 +1,177 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>CSS Color Extractor</title>
+  <meta name="description" content="Extract colors from CSS.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="bootstrap-theme.min.css">
+  <style type="text/css">
+  .main-container {
+    margin-top: 50px;
+    padding-top: 20px;
+  }
+  .navbar-header {
+    float: left;
+  }
+  .navbar-brand {
+    margin-right: 15px;
+  }
+  .navbar-default .navbar-brand {
+    color: #fff;
+  }
+  .navbar-default .navbar-brand:focus,
+  .navbar-default .navbar-brand:hover {
+    color: #fff;
+  }
+  .navbar-nav {
+    margin: 0;
+    height: 100%;
+  }
+  .navbar-nav > li {
+    float: left;
+  }
+  .navbar-nav > li > a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+  .navbar-default .navbar-nav > li > a {
+    color: #fff;
+  }
+  .panel-body {
+    padding-bottom: 15px;
+  }
+  .copyright {
+    font-size: 12px;
+    text-align: center;
+  }
+  form.loading:after {
+    content: "\00a0";
+    display: inline-block;
+    margin-top: 6px;
+    height: 22px;
+    width: 22px;
+    background: url(loader.gif) no-repeat 0 0;
+    vertical-align: top;
+  }
+  .drag-n-drop {
+    border: 2px dashed #ccc;
+    overflow: hidden;
+    position: relative;
+    padding: 60px 20px;
+  }
+  .drag-n-drop-placeholder {
+    vertical-align: middle;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+    color: #ccc;
+  }
+  .drag-n-drop input[type=file] {
+    background: none;
+    border: none;
+    outline: none;
+    margin-left: -100%;
+    width: 200%;
+    position: absolute;
+    padding: 0;
+    top: 0;
+    height: 100%;
+  }
+  @media (max-width: 400px) {
+    .navbar-brand {
+      font-size: 13px;
+      line-height: 26px;
+    }
+    .navbar-nav {
+      font-size: 13px;
+    }
+    .hidden-xxs {
+      display: none;
+    }
+  }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <span class="navbar-brand"><span class="hidden-xxs">CSS </span>Color Extractor</span>
+      </div>
+      <ul class="nav navbar-nav" role="tablist">
+        <li role="presentation" class="active"><a href="#paste-css" aria-controls="paste-css" role="tab" data-toggle="tab">Paste</a></li>
+        <li role="presentation"><a href="#upload-css" aria-controls="upload-css" role="tab" data-toggle="tab">Upload</a></li>
+        <li role="presentation"><a href="#url-to-css" aria-controls="url-to-css" role="tab" data-toggle="tab">URL</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container main-container">
+    <div class="row">
+      <div class="col-md-12">
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="panel panel-default tab-pane active" id="paste-css">
+            <div class="panel-body">
+              <form>
+                <div class="form-group">
+                  <label class="sr-only" for="paste-css-input">Paste CSS</label>
+                  <textarea class="form-control" rows="6" id="paste-css-input" placeholder="Paste CSS here"></textarea>
+                </div>
+                <button class="btn btn-success" type="submit">Extract colors</button>
+              </form>
+            </div>
+          </div>
+          <div role="tabpanel" class="panel panel-default tab-pane" id="upload-css">
+            <div class="panel-body">
+              <form id="upload-css-form">
+                <div class="form-group">
+                  <label class="sr-only" for="upload-css-input">Upload CSS</label>
+                  <div class="drag-n-drop">
+                    <div class="drag-n-drop-placeholder">Drop CSS file here or click to browse</div>
+                    <input type="file" id="upload-css-input">
+                  </div>
+                </div>
+                <button class="btn btn-success" type="submit">Extract colors</button>
+              </form>
+            </div>
+          </div>
+          <div role="tabpanel" class="panel panel-default tab-pane" id="url-to-css">
+            <div class="panel-body">
+              <form>
+                <div class="form-group">
+                  <label class="sr-only" for="url-to-css-input">URL to a CSS file</label>
+                  <input type="text" id="url-to-css-input" placeholder="URL to a CSS file" class="form-control">
+                </div>
+                <button class="btn btn-success" type="submit">Extract colors</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div id="colors"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p class="copyright">&copy; <script>document.write(new Date().getFullYear())</script> <a href="https://github.com/rsanchez">Rob Sanchez</a>. Powered by <a href="https://github.com/rsanchez/css-color-extractor">css-color-extractor</a>.</p>
+      </div>
+    </div>
+  </div>
+  <script src="bundle.js"></script>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-7706080-7', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+</body>
+</html>
