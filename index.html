@@ -8,92 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="bootstrap.min.css">
   <link rel="stylesheet" href="bootstrap-theme.min.css">
-  <link rel="canonical" href="http://www.css-color-extractor.com/" />
-  <style type="text/css">
-  .main-container {
-    margin-top: 50px;
-    padding-top: 20px;
-  }
-  .navbar-header {
-    float: left;
-  }
-  .navbar-brand {
-    margin-right: 15px;
-  }
-  .navbar-default .navbar-brand {
-    color: #fff;
-  }
-  .navbar-default .navbar-brand:focus,
-  .navbar-default .navbar-brand:hover {
-    color: #fff;
-  }
-  .navbar-nav {
-    margin: 0;
-    height: 100%;
-  }
-  .navbar-nav > li {
-    float: left;
-  }
-  .navbar-nav > li > a {
-    padding-top: 15px;
-    padding-bottom: 15px;
-  }
-  .navbar-default .navbar-nav > li > a {
-    color: #fff;
-  }
-  .panel-body {
-    padding-bottom: 15px;
-  }
-  .copyright {
-    font-size: 12px;
-    text-align: center;
-  }
-  form.loading:after {
-    content: "\00a0";
-    display: inline-block;
-    margin-top: 6px;
-    height: 22px;
-    width: 22px;
-    background: url(loader.gif) no-repeat 0 0;
-    vertical-align: top;
-  }
-  .drag-n-drop {
-    border: 2px dashed #ccc;
-    overflow: hidden;
-    position: relative;
-    padding: 60px 20px;
-  }
-  .drag-n-drop-placeholder {
-    vertical-align: middle;
-    text-align: center;
-    display: inline-block;
-    width: 100%;
-    color: #ccc;
-  }
-  .drag-n-drop input[type=file] {
-    background: none;
-    border: none;
-    outline: none;
-    margin-left: -100%;
-    width: 200%;
-    position: absolute;
-    padding: 0;
-    top: 0;
-    height: 100%;
-  }
-  @media (max-width: 400px) {
-    .navbar-brand {
-      font-size: 13px;
-      line-height: 26px;
-    }
-    .navbar-nav {
-      font-size: 13px;
-    }
-    .hidden-xxs {
-      display: none;
-    }
-  }
-  </style>
+  <link rel="stylesheet" href="main.css">
+  <link rel="canonical" href="http://www.css-color-extractor.com/">
 </head>
 <body>
   <nav class="navbar navbar-default navbar-fixed-top">
@@ -111,70 +27,49 @@
   <div class="container main-container">
     <div class="row">
       <div class="col-md-12">
-        <!-- Tab panes -->
-        <div class="tab-content">
-          <div role="tabpanel" class="panel panel-default tab-pane active" id="paste-css">
-            <div class="panel-body">
-              <form>
-                <div class="form-group">
-                  <label class="sr-only" for="paste-css-input">Paste CSS</label>
-                  <textarea class="form-control" rows="6" id="paste-css-input" placeholder="Paste CSS here"></textarea>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="without-monochrome" checked="checked"> Without Monochrome
-                  </label>
-                  &nbsp;
-                  <label>
-                    <input type="checkbox" name="without-grey" checked="checked"> Without Grey
-                  </label>
-                </div>
-                <button class="btn btn-success" type="submit">Extract colors</button>
-              </form>
-            </div>
-          </div>
-          <div role="tabpanel" class="panel panel-default tab-pane" id="upload-css">
-            <div class="panel-body">
-              <form id="upload-css-form">
-                <div class="form-group">
-                  <label class="sr-only" for="upload-css-input">Upload CSS</label>
-                  <div class="drag-n-drop">
-                    <div class="drag-n-drop-placeholder">Drop CSS file here or click to browse</div>
-                    <input type="file" id="upload-css-input">
+        <div id="error"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <form id="extractor-form">
+              <!-- Tab panes -->
+              <div class="tab-content">
+                <div class="tab-pane active" role="tab" id="paste-css">
+                  <div class="form-group">
+                    <label class="sr-only" for="paste-css-input">Paste CSS</label>
+                    <textarea class="form-control" rows="6" id="paste-css-input" placeholder="Paste CSS here"></textarea>
                   </div>
                 </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="without-monochrome" checked="checked"> Without Monochrome
-                  </label>
-                  &nbsp;
-                  <label>
-                    <input type="checkbox" name="without-grey" checked="checked"> Without Grey
-                  </label>
+                <div class="tab-pane" role="tab" id="upload-css">
+                  <div class="form-group">
+                    <label class="sr-only" for="upload-css-input">Upload CSS</label>
+                    <div class="drag-n-drop">
+                      <div class="drag-n-drop-placeholder">Drop CSS file here or click to browse</div>
+                      <input type="file" id="upload-css-input">
+                    </div>
+                  </div>
                 </div>
-                <button class="btn btn-success" type="submit">Extract colors</button>
-              </form>
-            </div>
-          </div>
-          <div role="tabpanel" class="panel panel-default tab-pane" id="url-to-css">
-            <div class="panel-body">
-              <form>
-                <div class="form-group">
-                  <label class="sr-only" for="url-to-css-input">URL to a CSS file</label>
-                  <input type="text" id="url-to-css-input" placeholder="URL to a CSS file" class="form-control">
+                <div class="tab-pane" role="tab" id="url-to-css">
+                  <div class="form-group">
+                    <label class="sr-only" for="url-to-css-input">URL to a CSS file</label>
+                    <input type="text" id="url-to-css-input" placeholder="URL to a CSS file" class="form-control">
+                  </div>
                 </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" name="without-monochrome" checked="checked"> Without Monochrome
-                  </label>
-                  &nbsp;
-                  <label>
-                    <input type="checkbox" name="without-grey" checked="checked"> Without Grey
-                  </label>
-                </div>
-                <button class="btn btn-success" type="submit">Extract colors</button>
-              </form>
-            </div>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" id="without-monochrome-input" checked="checked"> Without Monochrome
+                </label>
+                &nbsp;
+                <label>
+                  <input type="checkbox" id="without-grey-input" checked="checked"> Without Grey
+                </label>
+              </div>
+              <button class="btn btn-success" type="submit">Extract colors</button>
+            </form>
           </div>
         </div>
       </div>

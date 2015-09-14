@@ -1,0 +1,83 @@
+.main-container {
+  margin-top: 50px;
+  padding-top: 20px;
+}
+.navbar-header {
+  float: left;
+}
+.navbar-brand {
+  margin-right: 15px;
+}
+.navbar-default .navbar-brand {
+  color: #fff;
+}
+.navbar-default .navbar-brand:focus,
+.navbar-default .navbar-brand:hover {
+  color: #fff;
+}
+.navbar-nav {
+  margin: 0;
+  height: 100%;
+}
+.navbar-nav > li {
+  float: left;
+}
+.navbar-nav > li > a {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #fff;
+}
+.panel-body {
+  padding-bottom: 15px;
+}
+.copyright {
+  font-size: 12px;
+  text-align: center;
+}
+form.loading:after {
+  content: "\00a0";
+  display: inline-block;
+  margin-top: 6px;
+  height: 22px;
+  width: 22px;
+  background: url(loader.gif) no-repeat 0 0;
+  vertical-align: top;
+}
+.drag-n-drop {
+  border: 2px dashed #ccc;
+  overflow: hidden;
+  position: relative;
+  padding: 60px 20px;
+}
+.drag-n-drop-placeholder {
+  vertical-align: middle;
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  color: #ccc;
+}
+.drag-n-drop input[type=file] {
+  background: none;
+  border: none;
+  outline: none;
+  margin-left: -100%;
+  width: 200%;
+  position: absolute;
+  padding: 0;
+  top: 0;
+  height: 100%;
+}
+@media (max-width: 400px) {
+  .navbar-brand {
+    font-size: 13px;
+    line-height: 26px;
+  }
+  .navbar-nav {
+    font-size: 13px;
+  }
+  .hidden-xxs {
+    display: none;
+  }
+}
