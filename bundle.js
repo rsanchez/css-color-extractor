@@ -19,10 +19,19 @@ $(function() {
     }
 
     $('#paste-css').find('form').on('submit', function(e) {
+        var $form = $(this);
+
         e.preventDefault();
 
+        var options = {
+            withoutGrey: $form.find("[name=without-grey]").is(":checked"),
+            withoutMonochrome: $form.find("[name=without-monochrome]").is(":checked")
+        };
+
+        var css = $form.find('textarea').val();
+
         try {
-            var colors = require('css-color-extractor').fromCss($(this).find('textarea').val());
+            var colors = require('css-color-extractor').fromCss(css, options);
         } catch (e) {
             showError(e);
         }
@@ -30,16 +39,25 @@ $(function() {
         showColors(colors);
     });
 
-    function showColorsFromCssFile() {
+    $('#upload-css').find('form').on('submit', function(e) {
+        var $form = $(this);
+
+        e.preventDefault();
+
         var files = document.getElementById('upload-css-input').files;
         var reader = new FileReader();
+
+        var options = {
+            withoutGrey: $form.find("[name=without-grey]").is(":checked"),
+            withoutMonochrome: $form.find("[name=without-monochrome]").is(":checked")
+        };
 
         // Closure to capture the file information.
         reader.onload = function(event) {
             var css = event.target.result;
             var colors = [];
             try {
-                colors = colors.concat(require('css-color-extractor').fromCss(css));
+                colors = colors.concat(require('css-color-extractor').fromCss(css, options));
             } catch (e) {
                 showError(e);
             }
@@ -51,11 +69,6 @@ $(function() {
             // Read in the image file as a data URL.
             reader.readAsText(files[i]);
         }
-    }
-
-    $('#upload-css').find('form').on('submit', function(e) {
-        e.preventDefault();
-        showColorsFromCssFile();
     });
 
     $('#upload-css-input').on('change', function() {
@@ -65,7 +78,7 @@ $(function() {
 
         $placeholder.html(filename);
 
-        showColorsFromCssFile();
+        $('#upload-css').submit();
      });
 
     $('#url-to-css').find('form').on('submit', function(e) {
@@ -82,15 +95,20 @@ $(function() {
             return;
         }
 
+        var options = {
+            withoutGrey: $form.find("[name=without-grey]").is(":checked"),
+            withoutMonochrome: $form.find("[name=without-monochrome]").is(":checked")
+        };
+
         $.ajax({
             url: 'https://css-color-extractor.herokuapp.com/',
             data: {
                 url: url
             },
             dataType: 'text',
-            success: function(data) {
+            success: function(css) {
                 try {
-                    var colors = require('css-color-extractor').fromCss(data);
+                    var colors = require('css-color-extractor').fromCss(css, options);
                 } catch (e) {
                     showError(e);
                 }
