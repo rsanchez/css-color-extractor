@@ -3,8 +3,9 @@ var gulp = require('gulp');
 var source = require('vinyl-source-stream');
 
 gulp.task('default', function() {
-    browserify('./app.js')
-    .bundle()
+    var bundler = browserify('./app.js', {debug: true});
+    bundler.plugin('minifyify', {map: null, output: '/dev/null'});
+    bundler.bundle()
     .pipe(source('bundle.js'))
     .pipe(gulp.dest('./'));
 });
