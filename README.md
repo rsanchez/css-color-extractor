@@ -4,6 +4,8 @@ Extract colors (named, hex, rgb, rgba, hsl, and hsla) from CSS.
 
 This tool is useful if you are re-skinning a site with a new color scheme and need a starting point for a new stylesheet.
 
+Powers http://www.css-color-extractor.com.
+
 [ci-img]:  https://travis-ci.org/rsanchez/css-color-extractor.svg
 [ci]:      https://travis-ci.org/rsanchez/css-color-extractor
 
