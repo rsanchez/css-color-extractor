@@ -1,3 +1,7 @@
+body,
+html {
+  background-color: #f9fbfc;
+}
 .main-container {
   margin-top: 50px;
   padding-top: 20px;
@@ -31,6 +35,9 @@
 }
 .panel-body {
   padding-bottom: 15px;
+}
+.checkbox label {
+  color: #5b6c6e;
 }
 .copyright {
   font-size: 12px;
