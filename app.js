@@ -124,5 +124,9 @@ $(function() {
         $placeholder.html(filename);
 
         $('#extractor-form').submit();
+     }).on('dragenter', function() {
+        $(this).closest('.drag-n-drop').addClass('bg-info');
+     }).on('drop dragleave', function() {
+        $(this).closest('.drag-n-drop').removeClass('bg-info');
      });
 });

@@ -39,11 +39,11 @@ textarea.paste-css-input {
 form.loading:after {
   content: "\00a0";
   display: inline-block;
-  margin-top: 6px;
+  margin-left: 6px;
   height: 22px;
   width: 22px;
   background: url(loader.gif) no-repeat 0 0;
-  vertical-align: top;
+  vertical-align: middle;
 }
 .drag-n-drop {
   border: 2px dashed #ccc;
@@ -59,6 +59,9 @@ form.loading:after {
   width: 100%;
   color: #ccc;
 }
+.bg-info .drag-n-drop-placeholder {
+  color: #fff;
+}
 .drag-n-drop input[type=file] {
   background: none;
   border: none;
@@ -69,6 +72,9 @@ form.loading:after {
   padding: 0;
   top: 0;
   height: 100%;
+}
+.drag-n-drop.bg-info input[type=file] {
+  cursor: copy;
 }
 .form-control {
   font-size: 16px;
