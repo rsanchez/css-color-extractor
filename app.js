@@ -13,13 +13,19 @@ $(function() {
             $('#colors').append('<div class="panel panel-default"><div class="panel-body" style="background-color: '+colors[i]+'; color: '+textColor+';">'+colors[i]+'</div></div>');
         }
 
+        resetForm();
+    }
+
+    function resetForm() {
         $('#extractor-form').removeClass('loading');
+
+        $('#extractor-form').find('[type=submit]').button('reset');
     }
 
     function showError(error) {
         $('#error').html('<div class="alert alert-danger" role="alert">'+(error.message || error)+'</div>');
 
-        $('#extractor-form').removeClass('loading');
+        resetForm();
     }
 
     function extractColorsFromCss(css) {
@@ -43,6 +49,7 @@ $(function() {
 
     function extractColorsFromFileInput(fileInput) {
         if (!fileInput.files || typeof fileInput.files[0] === 'undefined') {
+            $('#extractor-form').find('drag-n-drop-placeholder').html('Drop CSS file here or click to browse');
             return showError('Missing file');
         }
 
@@ -68,9 +75,14 @@ $(function() {
             },
             dataType: 'text',
             success: extractColorsFromCss,
-            error: function(xhr) {
-                showError(xhr.responseText);
-            }
+            error: function(xhr, textStatus) {
+                if (textStatus === 'timeout') {
+                    showError('Operation timed out.');
+                } else {
+                    showError(xhr.responseText);
+                }
+            },
+            timeout: 15000
         });
     }
 
@@ -78,12 +90,15 @@ $(function() {
         var $form = $(this);
         var $tab = $form.find('.tab-pane.active');
         var tabId = $tab.attr('id');
+        var $button = $form.find('[type=submit]');
 
         e.preventDefault();
 
         $('#error').html('');
 
         $form.addClass('loading');
+
+        $button.button('loading');
 
         switch (tabId) {
             case 'paste-css':

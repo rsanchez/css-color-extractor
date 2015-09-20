@@ -1,43 +1,36 @@
 body,
 html {
-  background-color: #f9fbfc;
+  background-color: #fff;
+  font-size: 16px;
 }
 .main-container {
-  margin-top: 50px;
-  padding-top: 20px;
+  padding-top: 30px;
 }
-.navbar-header {
-  float: left;
+h1 {
+  text-align: center;
+  margin: 0 0 20px;
+  font-size: 26px;
+  color: #bbb;
 }
-.navbar-brand {
-  margin-right: 15px;
+.nav-pills {
+  text-align: center;
+  margin-bottom: 20px;
 }
-.navbar-default .navbar-brand {
-  color: #fff;
+.nav-pills > li {
+  float: none;
+  font-size: 16px;
+  display: inline-block;
 }
-.navbar-default .navbar-brand:focus,
-.navbar-default .navbar-brand:hover {
-  color: #fff;
+textarea.paste-css-input {
+  height: 145px;
 }
-.navbar-nav {
-  margin: 0;
-  height: 100%;
-}
-.navbar-nav > li {
-  float: left;
-}
-.navbar-nav > li > a {
-  padding-top: 15px;
+.main-panel .panel-body {
   padding-bottom: 15px;
+  min-height: 273px;
 }
-.navbar-default .navbar-nav > li > a {
-  color: #fff;
-}
-.panel-body {
-  padding-bottom: 15px;
-}
-.checkbox label {
+.checkbox {
   color: #5b6c6e;
+  margin-bottom: 15px;
 }
 .copyright {
   font-size: 12px;
@@ -57,6 +50,7 @@ form.loading:after {
   overflow: hidden;
   position: relative;
   padding: 60px 20px;
+  height: 145px;
 }
 .drag-n-drop-placeholder {
   vertical-align: middle;
@@ -76,15 +70,6 @@ form.loading:after {
   top: 0;
   height: 100%;
 }
-@media (max-width: 400px) {
-  .navbar-brand {
-    font-size: 13px;
-    line-height: 26px;
-  }
-  .navbar-nav {
-    font-size: 13px;
-  }
-  .hidden-xxs {
-    display: none;
-  }
+.form-control {
+  font-size: 16px;
 }

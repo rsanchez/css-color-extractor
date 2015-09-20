@@ -7,24 +7,25 @@
   <meta name="description" content="Extract colors from CSS.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="bootstrap.min.css">
-  <link rel="stylesheet" href="bootstrap-theme.min.css">
   <link rel="stylesheet" href="main.css">
   <link rel="canonical" href="http://www.css-color-extractor.com/">
 </head>
 <body>
-  <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <span class="navbar-brand"><span class="hidden-xxs">CSS </span>Color Extractor</span>
-      </div>
-      <ul class="nav navbar-nav" role="tablist">
-        <li role="presentation" class="active"><a href="#paste-css" aria-controls="paste-css" role="tab" data-toggle="tab">Paste</a></li>
-        <li role="presentation"><a href="#upload-css" aria-controls="upload-css" role="tab" data-toggle="tab">Upload</a></li>
-        <li role="presentation"><a href="#url-to-css" aria-controls="url-to-css" role="tab" data-toggle="tab">URL</a></li>
-      </ul>
-    </div>
-  </nav>
   <div class="container main-container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>CSS Color Extractor</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="nav nav-pills" role="tablist">
+          <li role="presentation" class="active"><a href="#paste-css" aria-controls="paste-css" role="tab" data-toggle="tab">Paste</a></li>
+          <li role="presentation"><a href="#upload-css" aria-controls="upload-css" role="tab" data-toggle="tab">Upload</a></li>
+          <li role="presentation"><a href="#url-to-css" aria-controls="url-to-css" role="tab" data-toggle="tab">URL</a></li>
+        </ul>
+      </div>
+    </div>
     <div class="row">
       <div class="col-md-12">
         <div id="error"></div>
@@ -32,7 +33,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <div class="panel panel-default">
+        <div class="panel panel-default main-panel">
           <div class="panel-body">
             <form id="extractor-form">
               <!-- Tab panes -->
@@ -40,7 +41,7 @@
                 <div class="tab-pane active" role="tab" id="paste-css">
                   <div class="form-group">
                     <label class="sr-only" for="paste-css-input">Paste CSS</label>
-                    <textarea class="form-control" rows="6" id="paste-css-input" placeholder="Paste CSS here"></textarea>
+                    <textarea class="form-control paste-css-input" rows="6" id="paste-css-input" placeholder="Paste CSS here"></textarea>
                   </div>
                 </div>
                 <div class="tab-pane" role="tab" id="upload-css">
@@ -60,15 +61,17 @@
                 </div>
               </div>
               <div class="checkbox">
+                Without:
+                &nbsp;
                 <label>
-                  <input type="checkbox" id="without-monochrome-input" checked="checked"> Without Monochrome
+                  <input type="checkbox" id="without-monochrome-input" checked="checked"> Monochrome
                 </label>
                 &nbsp;
                 <label>
-                  <input type="checkbox" id="without-grey-input" checked="checked"> Without Grey
+                  <input type="checkbox" id="without-grey-input" checked="checked"> Grey
                 </label>
               </div>
-              <button class="btn btn-success" type="submit">Extract colors</button>
+              <button class="btn btn-lg btn-success" data-loading-text="Extracting..." type="submit">Extract colors</button>
             </form>
           </div>
         </div>
