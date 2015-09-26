@@ -7,10 +7,19 @@ html {
   padding-top: 30px;
 }
 h1 {
+  font-size: 26px;
+  margin: 0 0 20px;
+  text-align: center;
+}
+header {
+  color: #999;
   text-align: center;
   margin: 0 0 20px;
-  font-size: 26px;
-  color: #bbb;
+}
+@media screen and (max-width: 768px) {
+  header {
+    text-align: left;
+  }
 }
 .nav-pills {
   text-align: center;
