@@ -79,3 +79,6 @@ form.loading:after {
 .form-control {
   font-size: 16px;
 }
+.color-panels .panel {
+  background: transparent url(transparent.gif) repeat 0 0;
+}
