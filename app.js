@@ -82,7 +82,7 @@ $(function() {
                     showError(xhr.responseText);
                 }
             },
-            timeout: 15000
+            timeout: 30000
         });
     }
 
