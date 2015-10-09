@@ -86,6 +86,12 @@ $(function() {
         });
     }
 
+    function trackFormSubmitEvent(label) {
+        if (typeof 'ga' !== 'undefined') {
+            ga('send', 'event', 'Form', 'submit', label);
+        }
+    }
+
     $('#extractor-form').on('submit', function(e) {
         var $form = $(this);
         var $tab = $form.find('.tab-pane.active');
@@ -104,13 +110,19 @@ $(function() {
             case 'paste-css':
                 extractColorsFromCss($('#paste-css-input').val());
 
+                trackFormSubmitEvent('paste');
+
                 break;
             case 'upload-css':
                 extractColorsFromFileInput(document.getElementById('upload-css-input'));
 
+                trackFormSubmitEvent('upload');
+
                 break;
             case 'url-to-css':
                 extractColorsFromRemoteFile($('#url-to-css-input').val());
+
+                trackFormSubmitEvent('url');
 
                 break;
         }
