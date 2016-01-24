@@ -96,7 +96,11 @@ function CssColorExtractor() {
                 return;
             }
 
-            colors.push(value);
+            if (typeof color[options.colorFormat] === 'function') {
+                colors.push(color[options.colorFormat].call(color, value));
+            } else {
+                colors.push(value);
+            }
         });
 
         return unique(colors);

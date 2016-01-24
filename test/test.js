@@ -517,4 +517,49 @@ describe('postcss-colors-only', function () {
             done
         );
     });
+
+    it('should output rgbString format', function (done) {
+        test(
+            'a { color: #123123; }',
+            ['rgb(18, 49, 35)'],
+            { colorFormat: 'rgbString' },
+            done
+        );
+    });
+
+    it('should output hslString format', function (done) {
+        test(
+            'a { color: #123123; }',
+            ['hsl(153, 46%, 13%)'],
+            { colorFormat: 'hslString' },
+            done
+        );
+    });
+
+    it('should output percentString format', function (done) {
+        test(
+            'a { color: #123123; }',
+            ['rgb(7%, 19%, 14%)'],
+            { colorFormat: 'percentString' },
+            done
+        );
+    });
+
+    it('should output hexString format', function (done) {
+        test(
+            'a { color: rgb(255, 255, 255); }',
+            ['#FFFFFF'],
+            { colorFormat: 'hexString' },
+            done
+        );
+    });
+
+    it('should output keyword format', function (done) {
+        test(
+            'a { color: rgb(255, 255, 255); }',
+            ['white'],
+            { colorFormat: 'keyword' },
+            done
+        );
+    });
 });
