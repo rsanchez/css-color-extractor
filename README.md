@@ -72,6 +72,7 @@ var extractor = require('css-color-extractor');
 var options = {
   withoutGrey: false, // set to true to remove rules that only have grey colors
   withoutMonochrome: false, // set to true to remove rules that only have grey, black, or white colors
+  colorFormat: null // set to transform colors to the specified format. valid options are: hex, rgb, percent, hsl, hwb, and keyword
 };
 
 // extract from a full stylesheet
@@ -111,6 +112,12 @@ Use the `--without-grey` or `--without-monochrome` flag(s):
 
 ```
 css-color-extractor input.css --without-grey
+```
+
+Use the `--color-format` option to transform color output format:
+
+```
+css-color-extractor input.css --color-format=hsl
 ```
 
 Extract colors to file:
