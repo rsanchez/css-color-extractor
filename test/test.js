@@ -562,4 +562,13 @@ describe('postcss-colors-only', function () {
             done
         );
     });
+
+    it('should omit non-keyword colors', function (done) {
+        test(
+            'a { color: #123123; }',
+            [],
+            { colorFormat: 'keyword' },
+            done
+        );
+    });
 });
