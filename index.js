@@ -7,6 +7,26 @@ function CssColorExtractor() {
     var util = require('util');
     var unique = require('array-unique');
     var Color = require('color');
+    var propertiesWithColors = [
+        'color',
+        'background',
+        'background-color',
+        'background-image',
+        'border',
+        'border-top',
+        'border-right',
+        'border-bottom',
+        'border-left',
+        'border-color',
+        'border-top-color',
+        'border-right-color',
+        'border-bottom-color',
+        'border-left-color',
+        'outline',
+        'outline-color',
+        'text-shadow',
+        'box-shadow'
+    ];
     var colorFormats = [
         'hexString',
         'rgbString',
@@ -17,28 +37,7 @@ function CssColorExtractor() {
     ];
 
     function doesPropertyAllowColor(property) {
-        var properties = [
-            'color',
-            'background',
-            'background-color',
-            'background-image',
-            'border',
-            'border-top',
-            'border-right',
-            'border-bottom',
-            'border-left',
-            'border-color',
-            'border-top-color',
-            'border-right-color',
-            'border-bottom-color',
-            'border-left-color',
-            'outline',
-            'outline-color',
-            'text-shadow',
-            'box-shadow'
-        ];
-
-        return properties.indexOf(property) > -1;
+        return propertiesWithColors.indexOf(property) > -1;
     }
 
     function isColorGrey(color) {
