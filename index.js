@@ -7,6 +7,14 @@ function CssColorExtractor() {
     var util = require('util');
     var unique = require('array-unique');
     var Color = require('color');
+    var colorFormats = [
+        'hexString',
+        'rgbString',
+        'percentString',
+        'hslString',
+        'hwbString',
+        'keyword'
+    ];
 
     function doesPropertyAllowColor(property) {
         var properties = [
@@ -49,13 +57,18 @@ function CssColorExtractor() {
         return hsl.h === 0 && hsl.s === 0;
     }
 
+    function isValidColorFormat(format) {
+        return colorFormats.indexOf(format) > -1;
+    }
+
     function extractColors(string, options) {
         var colors = [];
         var values = [];
 
         options = util._extend({
             withoutGrey:       false,
-            withoutMonochrome: false
+            withoutMonochrome: false,
+            colorFormat:       null
         }, options);
 
         postcss.list.comma(string).forEach(function (items) {
@@ -96,9 +109,11 @@ function CssColorExtractor() {
                 return;
             }
 
-            if (typeof color[options.colorFormat] === 'function') {
-                colors.push(color[options.colorFormat].call(color, value));
-            } else {
+            if (isValidColorFormat(options.colorFormat)) {
+                value = color[options.colorFormat]();
+            }
+
+            if (value) {
                 colors.push(value);
             }
         });
