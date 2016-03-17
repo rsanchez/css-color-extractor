@@ -43,9 +43,19 @@ textarea.paste-css-input {
   padding-bottom: 15px;
   min-height: 273px;
 }
-.checkbox {
+.options {
   color: #5b6c6e;
-  margin-bottom: 15px;
+}
+.options label {
+  font-weight: normal;
+}
+.options .checkbox {
+  margin: 0 0 15px;
+}
+@media screen and (max-width: 660px) {
+  .options .form-group {
+    float: none !important;
+  }
 }
 .copyright {
   font-size: 12px;

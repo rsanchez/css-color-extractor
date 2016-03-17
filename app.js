@@ -35,7 +35,8 @@ $(function() {
 
         var options = {
             withoutGrey: $('#without-grey-input').is(':checked'),
-            withoutMonochrome: $('#without-monochrome-input').is(':checked')
+            withoutMonochrome: $('#without-monochrome-input').is(':checked'),
+            colorFormat: $('#color-format-input').val() || null
         };
 
         try {

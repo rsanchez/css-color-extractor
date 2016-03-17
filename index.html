@@ -80,16 +80,30 @@
                   </div>
                 </div>
               </div>
-              <div class="checkbox">
-                Without:
-                &nbsp;
-                <label>
-                  <input type="checkbox" id="without-monochrome-input" checked="checked"> Monochrome
-                </label>
-                &nbsp;
-                <label>
-                  <input type="checkbox" id="without-grey-input" checked="checked"> Grey
-                </label>
+              <div class="options">
+                <div class="form-group checkbox pull-left">
+                  <label>
+                    <input type="checkbox" id="without-monochrome-input" checked="checked">Without Monochrome
+                  </label>
+                  &nbsp;
+                  <label>
+                    <input type="checkbox" id="without-grey-input" checked="checked">Without Grey
+                  </label>
+                </div>
+                <div class="form-group pull-right">
+                  <label for="color-format-input">Output Color Format</label>
+                  &nbsp;
+                  <select id="color-format-input">
+                    <option value="">Leave as-is</option>
+                    <option value="hexString">Hex</option>
+                    <option value="rgbString">RGB</option>
+                    <option value="percentString">Percent</option>
+                    <option value="hslString">HSL</option>
+                    <option value="hwbString">HWB</option>
+                    <option value="keyword">Keyword</option>
+                  </select>
+                </div>
+                <div class="clearfix"></div>
               </div>
               <button class="btn btn-lg btn-success" data-loading-text="Extracting..." type="submit">Extract colors</button>
             </form>
