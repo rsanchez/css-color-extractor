@@ -3,7 +3,7 @@
     "bootstrap": "^3.3.5",
     "browserify": "^11.1.0",
     "color": "^0.10.1",
-    "css-color-extractor": "^0.0.4",
+    "css-color-extractor": "^0.0.5",
     "jquery": "^2.1.4"
   },
   "devDependencies": {
