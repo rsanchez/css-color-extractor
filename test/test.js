@@ -237,6 +237,15 @@ describe('postcss-colors-only', function () {
             done
         );
     });
+    
+    it('should extract fill.', function (done) {
+        test(
+            'svg { fill: red; } p { display: block; }',
+            ['red'],
+            {},
+            done
+        );
+    });
 
     it('should omit grey, but not black or white.', function (done) {
         test(
