@@ -68,6 +68,7 @@ function CssColorExtractor() {
         options = util._extend({
             withoutGrey:       false,
             withoutMonochrome: false,
+            allColors:         false,
             colorFormat:       null
         }, options);
 
@@ -118,7 +119,7 @@ function CssColorExtractor() {
             }
         });
 
-        return unique(colors);
+        return options.allColors ? colors : unique(colors);
     }
 
     function extractColorsFromDecl(decl, options) {
@@ -135,6 +136,10 @@ function CssColorExtractor() {
         postcss.parse(css).walkDecls(function (decl) {
             colors = colors.concat(extractColorsFromDecl(decl, options));
         });
+
+        if (options && options.allColors) {
+            return colors;
+        }
 
         return unique(colors);
     }

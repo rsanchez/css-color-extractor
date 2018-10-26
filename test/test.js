@@ -580,4 +580,34 @@ describe('postcss-colors-only', function () {
             done
         );
     });
+
+    it('should return unique colors', function (done) {
+        test(
+            'a { color: #123123; } p { color: #123123; } ' +
+                'button { background-color: #fff; }',
+            ['#123123', '#fff'],
+            {},
+            done
+        );
+    });
+
+    it('should return unique colors without options', function (done) {
+        test(
+            'a { color: #123123; } p { color: #123123; } ' +
+                'button { background-color: #fff; }',
+            ['#123123', '#fff'],
+            null,
+            done
+        );
+    });
+
+    it('should return all colors', function (done) {
+        test(
+            'a { color: #123123; } p { color: #123123; } ' +
+                'button { background-color: #fff; }',
+            ['#123123', '#123123', '#fff'],
+            { allColors: true },
+            done
+        );
+    });
 });

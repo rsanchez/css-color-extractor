@@ -73,6 +73,7 @@ var options = {
   withoutGrey: false, // set to true to remove rules that only have grey colors
   withoutMonochrome: false, // set to true to remove rules that only have grey, black, or white colors
   colorFormat: null // transform colors to one of the following formats: hexString, rgbString, percentString, hslString, hwbString, or keyword
+  allColors: false // set to true to get all colors instead of unique colors
 };
 
 // extract from a full stylesheet
