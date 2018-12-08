@@ -26,7 +26,11 @@ function CssColorExtractor() {
         'outline-color',
         'text-shadow',
         'box-shadow',
-        'fill'
+        'fill',
+        'stroke',
+        'stop-color',
+        'flood-color',
+        'lighting-color'
     ];
     var colorFormats = [
         'hexString',
