@@ -84,7 +84,10 @@ function CssColorExtractor() {
                 var match = item.match(regex);
 
                 if (match) {
-                    values = values.concat(postcss.list.comma(match[4]));
+                    values = values.concat.apply(
+                        values,
+                        postcss.list.comma(match[4]).map(postcss.list.space)
+                    );
                 } else {
                     values.push(item);
                 }

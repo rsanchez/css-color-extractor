@@ -137,6 +137,15 @@ describe('postcss-colors-only', function () {
         );
     });
 
+    it('should extract linear-gradient.', function (done) {
+        test(
+            'a { background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%) }',
+            ['rgba(2,0,36,1)', 'rgba(9,9,121,1)', 'rgba(0,212,255,1)'],
+            {},
+            done
+        );
+    });
+
     it('should extract outline-color.', function (done) {
         test(
             'a { outline-color: red; } p { display: block; }',
