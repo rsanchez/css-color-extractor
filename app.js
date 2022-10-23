@@ -70,10 +70,7 @@ $(function() {
         }
 
         $.ajax({
-            url: 'https://css-color-extractor.herokuapp.com/',
-            data: {
-                url: url
-            },
+            url: 'https://proxy.cors.sh/' + url,
             dataType: 'text',
             success: extractColorsFromCss,
             error: function(xhr, textStatus) {

@@ -11,5 +11,5 @@ gulp.task('default', function() {
 });
 
 gulp.task('watch', function(){
-    gulp.watch(['./gulpfile.js', './app.js', './package.json', '!./bundle.js'], 'default');
+    gulp.watch(['./gulpfile.js', './app.js', './package.json', '!./bundle.js'], ['default']);
 });
