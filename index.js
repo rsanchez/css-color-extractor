@@ -4,6 +4,20 @@ const postcss = require('postcss')
 const unique = require('array-unique')
 const Color = require('color')
 
+/**
+ * @typedef Options
+ * @property {boolean} withoutGrey
+ * @property {boolean} withoutMonochrome
+ * @property {boolean} allColors
+ * @property {string|null} colorFormat
+ */
+
+/**
+ * @typedef Data
+ * @property {string} value
+ * @property {Color} color
+ */
+
 function CssColorExtractor () {
   const propertiesWithColors = [
     'color',
@@ -39,10 +53,18 @@ function CssColorExtractor () {
     'keyword',
   ]
 
+  /**
+   * @param {string} property
+   * @returns {boolean}
+   */
   function doesPropertyAllowColor (property) {
     return propertiesWithColors.indexOf(property) > -1
   }
 
+  /**
+   * @param {Color} color
+   * @returns {boolean}
+   */
   function isColorGrey (color) {
     const red = color.red()
 
@@ -53,18 +75,32 @@ function CssColorExtractor () {
     return isColorMonochrome(color) && red > 0 && red < 255
   }
 
+  /**
+   * @param {Color} color
+   * @returns {boolean}
+   */
   function isColorMonochrome (color) {
     const hsl = color.hsl().object()
 
     return hsl.h === 0 && hsl.s === 0
   }
 
+  /**
+   * @param {string} format
+   * @returns {boolean}
+   */
   function isValidColorFormat (format) {
     return colorFormats.indexOf(format) > -1
   }
 
+  /**
+   * @param {string} value the original string color value extracted from css
+   * @param {Color} color
+   * @param {Options} options
+   * @returns {string}
+   */
   function serializeColor (value, color, options) {
-    if (options && isValidColorFormat(options.colorFormat)) {
+    if (options.colorFormat && isValidColorFormat(options.colorFormat)) {
       let colorFormat = options.colorFormat
       if (!color[options.colorFormat]) {
         colorFormat = colorFormat.replace(/String$/, '')
@@ -78,21 +114,35 @@ function CssColorExtractor () {
     return value
   }
 
+  /**
+   * @param {Partial<Options>} options
+   * @returns {Options}
+   */
   function defaultOptions (options) {
     return Object.assign({
       withoutGrey: false,
       withoutMonochrome: false,
       allColors: false,
-      colorFormat: null
+      colorFormat: null,
     }, options)
   }
 
+  /**
+   * @param {Data[]} data
+   * @param {Options} options
+   * @returns {string[]}
+   */
   function sortColors (data, options) {
+    options = defaultOptions(options)
     const colors = data.map(({ value, color }) => serializeColor(value, color, options))
-    const { allColors } = defaultOptions(options)
-    return allColors ? colors : unique(colors)
+    return options.allColors ? colors : unique(colors)
   }
 
+  /**
+   * @param {string} string
+   * @param {Options} options
+   * @returns {Data[]}
+   */
   function extractColorsFromString (string, options) {
     const colors = []
     let values = []
@@ -158,6 +208,11 @@ function CssColorExtractor () {
     return colors
   }
 
+  /**
+   * @param {postcss.Declaration} decl
+   * @param {Options} options
+   * @returns {Data[]}
+   */
   function extractColorsFromDecl (decl, options) {
     if (!doesPropertyAllowColor(decl.prop)) {
       return []
@@ -166,6 +221,11 @@ function CssColorExtractor () {
     return extractColorsFromString(decl.value, options)
   }
 
+  /**
+   * @param {string} css
+   * @param {Options} options
+   * @returns {Data[]}
+   */
   function extractColorsFromCss (css, options) {
     let colors = []
 
