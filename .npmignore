@@ -1,6 +1,6 @@
 .gitignore
-
+.github/workflows/
 node_modules/
 npm-debug.log
-
+.eslintrc.json
 test/
