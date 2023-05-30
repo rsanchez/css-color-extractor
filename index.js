@@ -63,16 +63,45 @@ function CssColorExtractor () {
     return colorFormats.indexOf(format) > -1
   }
 
-  function extractColors (string, options) {
-    const colors = []
-    let values = []
+  function serializeColor (value, color, options) {
+    if (options && isValidColorFormat(options.colorFormat)) {
+      let colorFormat = options.colorFormat
+      if (!color[options.colorFormat]) {
+        colorFormat = colorFormat.replace(/String$/, '')
+      }
+      const formatted = color[colorFormat]()
+      if (typeof formatted === 'string') {
+        return formatted
+      }
+      return formatted.string()
+    }
+    return value
+  }
 
-    options = Object.assign({
+  function defaultOptions (options) {
+    return Object.assign({
       withoutGrey: false,
       withoutMonochrome: false,
       allColors: false,
       colorFormat: null
     }, options)
+  }
+
+  function sortColors (data, options) {
+    const colors = data.map(({ value, color }) => serializeColor(value, color, options))
+    const { allColors } = defaultOptions(options)
+    return allColors ? colors : unique(colors)
+  }
+
+  function extractColorsFromString (string, options) {
+    const colors = []
+    let values = []
+
+    const {
+      withoutMonochrome,
+      withoutGrey,
+      colorFormat,
+    } = defaultOptions(options)
 
     postcss.list.comma(string).forEach(function (items) {
       postcss.list.space(items).forEach(function (item) {
@@ -107,38 +136,26 @@ function CssColorExtractor () {
         return
       }
 
-      if (options.withoutMonochrome && isColorMonochrome(color)) {
+      if (withoutMonochrome && isColorMonochrome(color)) {
         return
       }
 
-      if (options.withoutGrey && isColorGrey(color)) {
+      if (withoutGrey && isColorGrey(color)) {
         return
       }
 
-      if (options.colorFormat === 'keyword') {
-        value = color.keyword()
+      if (colorFormat === 'keyword') {
         // convert back to rgb to see if keyword is an exact match
-        const keywordColor = new Color(value)
+        const keywordColor = new Color(color.keyword())
         if (keywordColor.rgbNumber() !== color.rgbNumber()) {
           return
         }
-      } else if (isValidColorFormat(options.colorFormat)) {
-        let colorFormat = options.colorFormat
-        if (!color[options.colorFormat]) {
-          colorFormat = colorFormat.replace(/String$/, '')
-        }
-        value = color[colorFormat]()
-        if (typeof value !== 'string') {
-          value = value.string()
-        }
       }
 
-      if (value) {
-        colors.push(value)
-      }
+      colors.push({ value, color })
     })
 
-    return options.allColors ? colors : unique(colors)
+    return colors
   }
 
   function extractColorsFromDecl (decl, options) {
@@ -146,7 +163,7 @@ function CssColorExtractor () {
       return []
     }
 
-    return extractColors(decl.value, options)
+    return extractColorsFromString(decl.value, options)
   }
 
   function extractColorsFromCss (css, options) {
@@ -156,16 +173,12 @@ function CssColorExtractor () {
       colors = colors.concat(extractColorsFromDecl(decl, options))
     })
 
-    if (options && options.allColors) {
-      return colors
-    }
-
-    return unique(colors)
+    return colors
   }
 
-  this.fromDecl = extractColorsFromDecl
-  this.fromCss = extractColorsFromCss
-  this.fromString = extractColors
+  this.fromDecl = (decl, options) => sortColors(extractColorsFromDecl(decl, options), options)
+  this.fromCss = (css, options) => sortColors(extractColorsFromCss(css, options), options)
+  this.fromString = (string, options) => sortColors(extractColorsFromString(string, options), options)
 }
 
 module.exports = new CssColorExtractor()
