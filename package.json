@@ -1,6 +1,6 @@
 {
   "name": "css-color-extractor",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "Extract from colors from CSS.",
   "main": "index.js",
   "keywords": [
