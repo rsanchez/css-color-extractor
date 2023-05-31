@@ -1,8 +1,8 @@
-'use strict'
+'use strict';
 
-const postcss = require('postcss')
-const unique = require('array-unique')
-const Color = require('color')
+const postcss = require('postcss');
+const unique = require('array-unique');
+const Color = require('color');
 
 /**
  * @typedef Options
@@ -13,7 +13,7 @@ const Color = require('color')
  * @property {"hue"|"frequency"|null} sort
  */
 
-function CssColorExtractor () {
+function CssColorExtractor() {
   const propertiesWithColors = [
     'color',
     'background',
@@ -37,8 +37,8 @@ function CssColorExtractor () {
     'stroke',
     'stop-color',
     'flood-color',
-    'lighting-color'
-  ]
+    'lighting-color',
+  ];
   const colorFormats = [
     'hexString',
     'rgbString',
@@ -46,46 +46,46 @@ function CssColorExtractor () {
     'hslString',
     'hwbString',
     'keyword',
-  ]
+  ];
 
   /**
    * @param {string} property
    * @returns {boolean}
    */
-  function doesPropertyAllowColor (property) {
-    return propertiesWithColors.indexOf(property) > -1
+  function doesPropertyAllowColor(property) {
+    return propertiesWithColors.indexOf(property) > -1;
   }
 
   /**
    * @param {Color} color
    * @returns {boolean}
    */
-  function isColorGrey (color) {
-    const red = color.red()
+  function isColorGrey(color) {
+    const red = color.red();
 
     // we only need to test one color
     // since isColorMonochrome assures that all
     // three rgb colors are equal
 
-    return isColorMonochrome(color) && red > 0 && red < 255
+    return isColorMonochrome(color) && red > 0 && red < 255;
   }
 
   /**
    * @param {Color} color
    * @returns {boolean}
    */
-  function isColorMonochrome (color) {
-    const hsl = color.hsl().object()
+  function isColorMonochrome(color) {
+    const hsl = color.hsl().object();
 
-    return hsl.h === 0 && hsl.s === 0
+    return hsl.h === 0 && hsl.s === 0;
   }
 
   /**
    * @param {string} format
    * @returns {boolean}
    */
-  function isValidColorFormat (format) {
-    return colorFormats.indexOf(format) > -1
+  function isValidColorFormat(format) {
+    return colorFormats.indexOf(format) > -1;
   }
 
   /**
@@ -93,34 +93,34 @@ function CssColorExtractor () {
    * @param {Options} options
    * @returns {string}
    */
-  function serializeColor (value, options) {
+  function serializeColor(value, options) {
     if (!options.colorFormat || !isValidColorFormat(options.colorFormat)) {
-      return value
+      return value;
     }
-    const color = new Color(value)
-    let colorFormat = options.colorFormat
+    const color = new Color(value);
+    let colorFormat = options.colorFormat;
     if (!color[options.colorFormat]) {
-      colorFormat = colorFormat.replace(/String$/, '')
+      colorFormat = colorFormat.replace(/String$/, '');
     }
-    const formatted = color[colorFormat]()
+    const formatted = color[colorFormat]();
     if (typeof formatted === 'string') {
-      return formatted
+      return formatted;
     }
-    return formatted.string()
+    return formatted.string();
   }
 
   /**
    * @param {Partial<Options>} options
    * @returns {Options}
    */
-  function defaultOptions (options) {
+  function defaultOptions(options) {
     return Object.assign({
       withoutGrey: false,
       withoutMonochrome: false,
       allColors: false,
       colorFormat: null,
       sort: null,
-    }, options)
+    }, options);
   }
 
   /**
@@ -128,24 +128,24 @@ function CssColorExtractor () {
    * @param {Options} options
    * @returns {string[]}
    */
-  function sortColors (colors, options) {
-    options = defaultOptions(options)
-    colors = colors.map((value) => serializeColor(value, options))
+  function sortColors(colors, options) {
+    options = defaultOptions(options);
+    colors = colors.map((value) => serializeColor(value, options));
     if (options.sort === 'hue') {
       colors = colors.sort((a, b) => {
-        return new Color(a).hue() - new Color(b).hue()
-      })
+        return new Color(a).hue() - new Color(b).hue();
+      });
     }
     if (options.sort === 'frequency') {
-      const frequencyMap = new Map()
+      const frequencyMap = new Map();
       colors.forEach((value) => {
-        frequencyMap.set(value, (frequencyMap.get(value) || 0) + 1)
-      })
+        frequencyMap.set(value, (frequencyMap.get(value) || 0) + 1);
+      });
       colors = colors.sort((a, b) => {
-        return frequencyMap.get(b) - frequencyMap.get(a)
-      })
+        return frequencyMap.get(b) - frequencyMap.get(a);
+      });
     }
-    return options.allColors ? colors : unique(colors)
+    return options.allColors ? colors : unique(colors);
   }
 
   /**
@@ -153,67 +153,67 @@ function CssColorExtractor () {
    * @param {Options} options
    * @returns {string[]}
    */
-  function extractColorsFromString (string, options) {
+  function extractColorsFromString(string, options) {
     /** @type {string[]} */
-    let colors = []
+    let colors = [];
 
     const {
       withoutMonochrome,
       withoutGrey,
       colorFormat,
-    } = defaultOptions(options)
+    } = defaultOptions(options);
 
-    postcss.list.comma(string).forEach(function (items) {
-      postcss.list.space(items).forEach(function (item) {
+    postcss.list.comma(string).forEach(function(items) {
+      postcss.list.space(items).forEach(function(item) {
         const regex = new RegExp(
           '^' +
                     '(-webkit-|-moz-|-o-)?' +
                     '(repeating-)?' +
                     '(radial|linear)-gradient\\((.*?)\\)' +
-                    '$'
-        )
+                    '$',
+        );
 
-        const match = item.match(regex)
+        const match = item.match(regex);
 
         if (match) {
           colors = colors.concat.apply(
             colors,
-            postcss.list.comma(match[4]).map(postcss.list.space)
-          )
+            postcss.list.comma(match[4]).map(postcss.list.space),
+          );
         } else {
-          colors.push(item)
+          colors.push(item);
         }
-      })
-    })
+      });
+    });
 
     return colors.filter((value) => {
-      let color
+      let color;
 
       // check if it is a valid color
       try {
-        color = new Color(value)
+        color = new Color(value);
       } catch (e) {
-        return false
+        return false;
       }
 
       if (withoutMonochrome && isColorMonochrome(color)) {
-        return false
+        return false;
       }
 
       if (withoutGrey && isColorGrey(color)) {
-        return false
+        return false;
       }
 
       if (colorFormat === 'keyword') {
         // convert back to rgb to see if keyword is an exact match
-        const keywordColor = new Color(color.keyword())
+        const keywordColor = new Color(color.keyword());
         if (keywordColor.rgbNumber() !== color.rgbNumber()) {
-          return false
+          return false;
         }
       }
 
-      return true
-    })
+      return true;
+    });
   }
 
   /**
@@ -221,12 +221,12 @@ function CssColorExtractor () {
    * @param {Options} options
    * @returns {string[]}
    */
-  function extractColorsFromDecl (decl, options) {
+  function extractColorsFromDecl(decl, options) {
     if (!doesPropertyAllowColor(decl.prop)) {
-      return []
+      return [];
     }
 
-    return extractColorsFromString(decl.value, options)
+    return extractColorsFromString(decl.value, options);
   }
 
   /**
@@ -234,24 +234,24 @@ function CssColorExtractor () {
    * @param {Options} options
    * @returns {string[]}
    */
-  function extractColorsFromCss (css, options) {
-    let colors = []
+  function extractColorsFromCss(css, options) {
+    let colors = [];
 
-    postcss.parse(css).walkDecls(function (decl) {
-      colors = colors.concat(extractColorsFromDecl(decl, options))
-    })
+    postcss.parse(css).walkDecls(function(decl) {
+      colors = colors.concat(extractColorsFromDecl(decl, options));
+    });
 
-    return colors
+    return colors;
   }
 
   /** @type {(decl: postcss.Declaration, options: Options) => string[]} */
-  this.fromDecl = (decl, options) => sortColors(extractColorsFromDecl(decl, options), options)
+  this.fromDecl = (decl, options) => sortColors(extractColorsFromDecl(decl, options), options);
 
   /** @type {(css: string, options: Options) => string[]} */
-  this.fromCss = (css, options) => sortColors(extractColorsFromCss(css, options), options)
+  this.fromCss = (css, options) => sortColors(extractColorsFromCss(css, options), options);
 
   /** @type {(string: string, options: Options) => string[]} */
-  this.fromString = (string, options) => sortColors(extractColorsFromString(string, options), options)
+  this.fromString = (string, options) => sortColors(extractColorsFromString(string, options), options);
 }
 
-module.exports = new CssColorExtractor()
+module.exports = new CssColorExtractor();

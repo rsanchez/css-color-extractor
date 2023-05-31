@@ -12,6 +12,8 @@
         "ecmaVersion": "latest"
     },
     "rules": {
-        "comma-dangle": "off"
+        "comma-dangle": [2, "always-multiline"],
+        "space-before-function-paren": [2, "never"],
+        "semi": [2, "always"]
     }
 }
