@@ -1,13 +1,10 @@
-# CSS Color Extractor [![Build Status][ci-img]][ci]
+# CSS Color Extractor
 
 Extract colors (named, hex, rgb, rgba, hsl, and hsla) from CSS.
 
 This tool is useful if you are re-skinning a site with a new color scheme and need a starting point for a new stylesheet.
 
 Powers http://www.css-color-extractor.com.
-
-[ci-img]:  https://travis-ci.org/rsanchez/css-color-extractor.svg
-[ci]:      https://travis-ci.org/rsanchez/css-color-extractor
 
 ```css
 .foo {
@@ -53,6 +50,11 @@ This module looks at the following CSS properties for colors:
 * `outline-color`
 * `text-shadow`
 * `box-shadow`
+* `fill`
+* `stroke`
+* `stop-color`
+* `flood-color`
+* `lighting-color`
 
 ## Installation
 
@@ -72,8 +74,9 @@ var extractor = require('css-color-extractor');
 var options = {
   withoutGrey: false, // set to true to remove rules that only have grey colors
   withoutMonochrome: false, // set to true to remove rules that only have grey, black, or white colors
-  colorFormat: null // transform colors to one of the following formats: hexString, rgbString, percentString, hslString, hwbString, or keyword
-  allColors: false // set to true to get all colors instead of unique colors
+  colorFormat: null, // transform colors to one of the following formats: hexString, rgbString, percentString, hslString, hwbString, or keyword
+  allColors: false, // set to true to get all colors instead of unique colors
+  sort: null, // set to "hue" to sort colors in order of hue, or to "frequency" to sort colors by how many times they appear in the css
 };
 
 // extract from a full stylesheet
@@ -116,6 +119,12 @@ css-color-extractor input.css --without-grey
 ```
 
 Use the `--color-format` option to transform color output format (`hexString`, `rgbString`, `percentString`, `hslString`, `hwbString`, or `keyword`):
+
+```
+css-color-extractor input.css --color-format=hsl
+```
+
+Use the `--sort` option to sort the list of colors (`hue` or `frequency`):
 
 ```
 css-color-extractor input.css --color-format=hsl

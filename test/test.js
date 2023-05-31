@@ -1,4 +1,5 @@
 const extractor = require('../')
+const { describe, expect, it } = require('@jest/globals')
 
 const test = function (input, output, opts, done) {
   const result = extractor.fromCss(input, opts)
@@ -203,6 +204,15 @@ describe('postcss-colors-only', function () {
     test(
       'a { border: 1px solid white; } p { display: block; }',
       ['white'],
+      {},
+      done
+    )
+  })
+
+  it('should not extract border 0.', function (done) {
+    test(
+      'a { border: 0; } p { display: block; }',
+      [],
       {},
       done
     )
@@ -613,6 +623,28 @@ describe('postcss-colors-only', function () {
               'button { background-color: #fff; }',
       ['#123123', '#123123', '#fff'],
       { allColors: true },
+      done
+    )
+  })
+
+  it('should sort by frequency', function (done) {
+    test(
+      'a { color: #123123; } p { color: #123123; } ' +
+        'button { background-color: #fff; }' +
+        'div { background-color: #000; color: #000 }' +
+        'input { background-color: #000; }',
+      ['#000', '#123123', '#fff'],
+      { sort: 'frequency' },
+      done
+    )
+  })
+
+  it('should sort by hue', function (done) {
+    test(
+      'a { color: #0000FF; } p { color: #FF0000; } ' +
+        'button { background-color: #00FF00; }',
+      ['#FF0000', '#00FF00', '#0000FF'],
+      { sort: 'hue' },
       done
     )
   })

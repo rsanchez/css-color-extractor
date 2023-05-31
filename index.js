@@ -10,12 +10,7 @@ const Color = require('color')
  * @property {boolean} withoutMonochrome
  * @property {boolean} allColors
  * @property {string|null} colorFormat
- */
-
-/**
- * @typedef Data
- * @property {string} value
- * @property {Color} color
+ * @property {"hue"|"frequency"|null} sort
  */
 
 function CssColorExtractor () {
@@ -124,6 +119,7 @@ function CssColorExtractor () {
       withoutMonochrome: false,
       allColors: false,
       colorFormat: null,
+      sort: null,
     }, options)
   }
 
@@ -135,6 +131,20 @@ function CssColorExtractor () {
   function sortColors (colors, options) {
     options = defaultOptions(options)
     colors = colors.map((value) => serializeColor(value, options))
+    if (options.sort === 'hue') {
+      colors = colors.sort((a, b) => {
+        return new Color(a).hue() - new Color(b).hue()
+      })
+    }
+    if (options.sort === 'frequency') {
+      const frequencyMap = new Map()
+      colors.forEach((value) => {
+        frequencyMap.set(value, (frequencyMap.get(value) || 0) + 1)
+      })
+      colors = colors.sort((a, b) => {
+        return frequencyMap.get(b) - frequencyMap.get(a)
+      })
+    }
     return options.allColors ? colors : unique(colors)
   }
 
