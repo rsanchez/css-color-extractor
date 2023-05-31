@@ -95,23 +95,23 @@ function CssColorExtractor () {
 
   /**
    * @param {string} value the original string color value extracted from css
-   * @param {Color} color
    * @param {Options} options
    * @returns {string}
    */
-  function serializeColor (value, color, options) {
-    if (options.colorFormat && isValidColorFormat(options.colorFormat)) {
-      let colorFormat = options.colorFormat
-      if (!color[options.colorFormat]) {
-        colorFormat = colorFormat.replace(/String$/, '')
-      }
-      const formatted = color[colorFormat]()
-      if (typeof formatted === 'string') {
-        return formatted
-      }
-      return formatted.string()
+  function serializeColor (value, options) {
+    if (!options.colorFormat || !isValidColorFormat(options.colorFormat)) {
+      return value
     }
-    return value
+    const color = new Color(value)
+    let colorFormat = options.colorFormat
+    if (!color[options.colorFormat]) {
+      colorFormat = colorFormat.replace(/String$/, '')
+    }
+    const formatted = color[colorFormat]()
+    if (typeof formatted === 'string') {
+      return formatted
+    }
+    return formatted.string()
   }
 
   /**
@@ -128,24 +128,24 @@ function CssColorExtractor () {
   }
 
   /**
-   * @param {Data[]} data
+   * @param {string[]} colors
    * @param {Options} options
    * @returns {string[]}
    */
-  function sortColors (data, options) {
+  function sortColors (colors, options) {
     options = defaultOptions(options)
-    const colors = data.map(({ value, color }) => serializeColor(value, color, options))
+    colors = colors.map((value) => serializeColor(value, options))
     return options.allColors ? colors : unique(colors)
   }
 
   /**
    * @param {string} string
    * @param {Options} options
-   * @returns {Data[]}
+   * @returns {string[]}
    */
   function extractColorsFromString (string, options) {
-    const colors = []
-    let values = []
+    /** @type {string[]} */
+    let colors = []
 
     const {
       withoutMonochrome,
@@ -166,52 +166,50 @@ function CssColorExtractor () {
         const match = item.match(regex)
 
         if (match) {
-          values = values.concat.apply(
-            values,
+          colors = colors.concat.apply(
+            colors,
             postcss.list.comma(match[4]).map(postcss.list.space)
           )
         } else {
-          values.push(item)
+          colors.push(item)
         }
       })
     })
 
-    values.forEach(function (value) {
+    return colors.filter((value) => {
       let color
 
       // check if it is a valid color
       try {
         color = new Color(value)
       } catch (e) {
-        return
+        return false
       }
 
       if (withoutMonochrome && isColorMonochrome(color)) {
-        return
+        return false
       }
 
       if (withoutGrey && isColorGrey(color)) {
-        return
+        return false
       }
 
       if (colorFormat === 'keyword') {
         // convert back to rgb to see if keyword is an exact match
         const keywordColor = new Color(color.keyword())
         if (keywordColor.rgbNumber() !== color.rgbNumber()) {
-          return
+          return false
         }
       }
 
-      colors.push({ value, color })
+      return true
     })
-
-    return colors
   }
 
   /**
    * @param {postcss.Declaration} decl
    * @param {Options} options
-   * @returns {Data[]}
+   * @returns {string[]}
    */
   function extractColorsFromDecl (decl, options) {
     if (!doesPropertyAllowColor(decl.prop)) {
@@ -224,7 +222,7 @@ function CssColorExtractor () {
   /**
    * @param {string} css
    * @param {Options} options
-   * @returns {Data[]}
+   * @returns {string[]}
    */
   function extractColorsFromCss (css, options) {
     let colors = []
@@ -236,8 +234,13 @@ function CssColorExtractor () {
     return colors
   }
 
+  /** @type {(decl: postcss.Declaration, options: Options) => string[]} */
   this.fromDecl = (decl, options) => sortColors(extractColorsFromDecl(decl, options), options)
+
+  /** @type {(css: string, options: Options) => string[]} */
   this.fromCss = (css, options) => sortColors(extractColorsFromCss(css, options), options)
+
+  /** @type {(string: string, options: Options) => string[]} */
   this.fromString = (string, options) => sortColors(extractColorsFromString(string, options), options)
 }
 
