@@ -125,11 +125,11 @@ function CssColorExtractor() {
 
   /**
    * @param {string[]} colors
-   * @param {Options} options
+   * @param {Partial<Options>} sortOptions
    * @returns {string[]}
    */
-  function sortColors(colors, options) {
-    options = defaultOptions(options);
+  function sortColors(colors, sortOptions) {
+    const options = defaultOptions(sortOptions);
     colors = colors.map((value) => serializeColor(value, options));
     if (options.sort === 'hue') {
       colors = colors.sort((a, b) => {
@@ -150,7 +150,7 @@ function CssColorExtractor() {
 
   /**
    * @param {string} string
-   * @param {Options} options
+   * @param {Partial<Options>} options
    * @returns {string[]}
    */
   function extractColorsFromString(string, options) {
@@ -218,7 +218,7 @@ function CssColorExtractor() {
 
   /**
    * @param {postcss.Declaration} decl
-   * @param {Options} options
+   * @param {Partial<Options>} options
    * @returns {string[]}
    */
   function extractColorsFromDecl(decl, options) {
@@ -231,7 +231,7 @@ function CssColorExtractor() {
 
   /**
    * @param {string} css
-   * @param {Options} options
+   * @param {Partial<Options>} options
    * @returns {string[]}
    */
   function extractColorsFromCss(css, options) {
@@ -244,13 +244,13 @@ function CssColorExtractor() {
     return colors;
   }
 
-  /** @type {(decl: postcss.Declaration, options: Options) => string[]} */
+  /** @type {(decl: postcss.Declaration, options: Partial<Options>) => string[]} */
   this.fromDecl = (decl, options) => sortColors(extractColorsFromDecl(decl, options), options);
 
-  /** @type {(css: string, options: Options) => string[]} */
+  /** @type {(css: string, options: Partial<Options>) => string[]} */
   this.fromCss = (css, options) => sortColors(extractColorsFromCss(css, options), options);
 
-  /** @type {(string: string, options: Options) => string[]} */
+  /** @type {(string: string, options: Partial<Options>) => string[]} */
   this.fromString = (string, options) => sortColors(extractColorsFromString(string, options), options);
 }
 
