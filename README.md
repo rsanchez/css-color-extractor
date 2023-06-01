@@ -121,13 +121,19 @@ css-color-extractor input.css --without-grey
 Use the `--color-format` option to transform color output format (`hexString`, `rgbString`, `percentString`, `hslString`, `hwbString`, or `keyword`):
 
 ```
-css-color-extractor input.css --color-format=hsl
+css-color-extractor input.css --color-format=hslString
 ```
 
 Use the `--sort` option to sort the list of colors (`hue` or `frequency`):
 
 ```
-css-color-extractor input.css --color-format=hsl
+css-color-extractor input.css --sort=hue
+```
+
+Use the `--inverse` option to remove colors from rules:
+
+```
+css-color-extractor input.css output.css --inverse
 ```
 
 Extract colors to file:
