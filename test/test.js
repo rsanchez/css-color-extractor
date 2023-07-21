@@ -153,6 +153,24 @@ describe('postcss-colors-only', function() {
     );
   });
 
+  it('should extract text-decoration.', function(done) {
+    test(
+      'a { text-decoration: overline blue; } p { display: block; }',
+      ['blue'],
+      {},
+      done,
+    );
+  });
+
+  it('should extract text-decoration-color.', function(done) {
+    test(
+      'a { text-decoration-color: black; } p { display: block; }',
+      ['black'],
+      {},
+      done,
+    );
+  });
+
   it('should extract text-shadow.', function(done) {
     test(
       'a { text-shadow: 1px 1px 2px black; } p { display: block; }',
