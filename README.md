@@ -76,7 +76,7 @@ var extractor = require('css-color-extractor');
 var options = {
   withoutGrey: false, // set to true to remove rules that only have grey colors
   withoutMonochrome: false, // set to true to remove rules that only have grey, black, or white colors
-  colorFormat: null, // transform colors to one of the following formats: hexString, rgbString, percentString, hslString, hwbString, or keyword
+  colorFormat: null, // transform colors to one of the following formats: hexString, hexaString, rgbString, percentString, hslString, hwbString, or keyword
   allColors: false, // set to true to get all colors instead of unique colors
   sort: null, // set to "hue" to sort colors in order of hue, or to "frequency" to sort colors by how many times they appear in the css
 };
