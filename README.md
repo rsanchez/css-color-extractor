@@ -48,6 +48,8 @@ This module looks at the following CSS properties for colors:
 * `border-left-color`
 * `outline`
 * `outline-color`
+* `text-decoration`
+* `text-decoration-color`
 * `text-shadow`
 * `box-shadow`
 * `fill`

@@ -30,6 +30,8 @@ function CssColorExtractor() {
     'border-left-color',
     'outline',
     'outline-color',
+    'text-decoration',
+    'text-decoration-color',
     'text-shadow',
     'box-shadow',
     'fill',
