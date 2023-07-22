@@ -42,6 +42,7 @@ function CssColorExtractor() {
   ];
   const colorFormats = [
     'hexString',
+    'hexaString',
     'rgbString',
     'percentString',
     'hslString',

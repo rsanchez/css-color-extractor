@@ -597,6 +597,33 @@ describe('postcss-colors-only', function() {
     );
   });
 
+  it('should output hexaString format', function(done) {
+    test(
+      'a { color: rgb(255, 255, 255); }',
+      ['#FFFFFFFF'],
+      { colorFormat: 'hexaString' },
+      done,
+    );
+  });
+
+  it('should output hexaString format', function(done) {
+    test(
+      'a { color: rgba(255, 255, 255, 0.3); }',
+      ['#FFFFFF4D'],
+      { colorFormat: 'hexaString' },
+      done,
+    );
+  });
+
+  it('should output hexaString format', function(done) {
+    test(
+      'a { color: #FFFFFF4D; }',
+      ['#FFFFFF4D'],
+      { colorFormat: 'hexaString' },
+      done,
+    );
+  });
+
   it('should output keyword format', function(done) {
     test(
       'a { color: rgb(255, 255, 255); }',
