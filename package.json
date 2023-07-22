@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/rsanchez/css-color-extractor",
   "dependencies": {
-    "array-unique": "^0.3.2",
     "color": "^4.2.3",
     "postcss": ">=5.0.2"
   },

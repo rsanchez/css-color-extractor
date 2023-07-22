@@ -1,7 +1,6 @@
 'use strict';
 
 const postcss = require('postcss');
-const unique = require('array-unique');
 const Color = require('color');
 
 /**
@@ -146,6 +145,14 @@ function CssColorExtractor() {
       });
     }
     return options.allColors ? colors : unique(colors);
+  }
+
+  /**
+   * @param {string[]} items
+   * @returns {string[]}
+   */
+  function unique(items) {
+    return [...new Set(items)];
   }
 
   /**
