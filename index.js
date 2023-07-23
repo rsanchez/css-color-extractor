@@ -12,6 +12,14 @@ const Color = require('color');
  * @property {"hue"|"frequency"|null} sort
  */
 
+/**
+ * @typedef {Record<string, string>} Variables
+ */
+
+/**
+ * @typedef {Record<string, Variables>} SelectorVariables
+ */
+
 function CssColorExtractor() {
   const propertiesWithColors = [
     'color',
@@ -159,11 +167,35 @@ function CssColorExtractor() {
   }
 
   /**
+   * @param {postcss.Root} root
+   * @returns {SelectorVariables}
+   */
+  function extractVariables(root) {
+    /** @type {SelectorVariables} */
+    const selectorVariables = {};
+
+    root.walkDecls(function(decl) {
+      // @ts-ignore
+      const selector = /** @type {string|undefined} */ (decl.parent?.selector);
+
+      if (selector && decl.prop.startsWith('--')) {
+        selectorVariables[selector] = {
+          ...(selectorVariables[selector] || {}),
+          [decl.prop]: decl.value,
+        };
+      }
+    });
+
+    return selectorVariables;
+  }
+
+  /**
    * @param {string} string
    * @param {Partial<Options>} options
+   * @param {Variables|undefined} variables
    * @returns {string[]}
    */
-  function extractColorsFromString(string, options) {
+  function extractColorsFromString(string, options, variables = undefined) {
     /** @type {string[]} */
     let colors = [];
 
@@ -195,6 +227,24 @@ function CssColorExtractor() {
         }
       });
     });
+
+    if (variables) {
+      // use the variable's value if this color is a CSS variable
+      colors = colors
+        .map((value) => {
+          const isVariable = value.match(/^var\((--.*?)\)$/);
+
+          if (isVariable) {
+            const variable = isVariable[1];
+
+            if (variables[variable]) {
+              return variables[variable];
+            }
+          }
+
+          return value;
+        });
+    }
 
     return colors.filter((value) => {
       let color;
@@ -229,14 +279,32 @@ function CssColorExtractor() {
   /**
    * @param {postcss.Declaration} decl
    * @param {Partial<Options>} options
+   * @param {SelectorVariables|undefined} selectorVariables
    * @returns {string[]}
    */
-  function extractColorsFromDecl(decl, options) {
+  function extractColorsFromDecl(decl, options, selectorVariables = undefined) {
     if (!doesPropertyAllowColor(decl.prop)) {
       return [];
     }
 
-    return extractColorsFromString(decl.value, options);
+    // @ts-ignore
+    const selector = /** @type {string|undefined} */ (decl.parent?.selector);
+
+    /** @type {Variables|undefined} */
+    let variables;
+
+    if (selectorVariables) {
+      variables = {
+        ...(selectorVariables[':root'] || {}),
+        ...(selector && selectorVariables[selector] ? selectorVariables[selector] : {}),
+      };
+    }
+
+    return extractColorsFromString(
+      decl.value,
+      options,
+      variables,
+    );
   }
 
   /**
@@ -247,21 +315,27 @@ function CssColorExtractor() {
   function extractColorsFromCss(css, options) {
     let colors = [];
 
-    postcss.parse(css).walkDecls(function(decl) {
-      colors = colors.concat(extractColorsFromDecl(decl, options));
+    const root = postcss.parse(css);
+
+    const selectorVariables = extractVariables(root);
+
+    root.walkDecls(function(decl) {
+      colors = colors.concat(extractColorsFromDecl(decl, options, selectorVariables));
     });
 
     return colors;
   }
 
-  /** @type {(decl: postcss.Declaration, options: Partial<Options>) => string[]} */
-  this.fromDecl = (decl, options) => sortColors(extractColorsFromDecl(decl, options), options);
+  this.extractVariables = extractVariables;
+
+  /** @type {(decl: postcss.Declaration, options: Partial<Options>, selectorVariables?: SelectorVariables) => string[]} */
+  this.fromDecl = (decl, options, selectorVariables) => sortColors(extractColorsFromDecl(decl, options, selectorVariables), options);
 
   /** @type {(css: string, options: Partial<Options>) => string[]} */
   this.fromCss = (css, options) => sortColors(extractColorsFromCss(css, options), options);
 
-  /** @type {(string: string, options: Partial<Options>) => string[]} */
-  this.fromString = (string, options) => sortColors(extractColorsFromString(string, options), options);
+  /** @type {(string: string, options: Partial<Options>, variables?: Variables) => string[]} */
+  this.fromString = (string, options, variables) => sortColors(extractColorsFromString(string, options, variables), options);
 }
 
 module.exports = new CssColorExtractor();
