@@ -693,4 +693,22 @@ describe('postcss-colors-only', function() {
       done,
     );
   });
+
+  it('should read :root color variables', function(done) {
+    test(
+      ':root { --test-color: #0000FF; } p { color: var(--test-color); }',
+      ['#0000FF'],
+      null,
+      done,
+    );
+  });
+
+  it('should read color variables in the same scope', function(done) {
+    test(
+      'p { --test-color: #0000FF; color: var(--test-color); }',
+      ['#0000FF'],
+      null,
+      done,
+    );
+  });
 });
